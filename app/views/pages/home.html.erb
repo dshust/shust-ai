@@ -1,58 +1,46 @@
 <div class="max-w-6xl mx-auto px-6 py-16 sm:py-24">
 
   <%# Header %>
-  <header class="mb-20 border-b border-[#e5e5e5] pb-12">
-    <h1 class="font-['PT_Serif'] text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+  <header class="mb-20">
+    <h1 class="font-['PT_Serif'] text-3xl sm:text-4xl font-bold tracking-tight mb-3">
       Дмитрий Шустов
     </h1>
-    <p class="text-[#666666] text-lg leading-relaxed max-w-xl">
+    <p class="text-[#666666] text-lg leading-relaxed max-w-xl mb-6">
       Делаю Telegram-боты и веб-сервисы на стыке AI и продукта.
     </p>
-    <div class="mt-6 flex gap-5 text-sm text-[#666666]">
+    <div class="flex gap-5 text-sm text-[#666666]">
       <a href="https://t.me/dvshustov" target="_blank" class="hover:text-[#111111] transition-colors">Telegram</a>
       <a href="https://github.com/dshust" target="_blank" class="hover:text-[#111111] transition-colors">GitHub</a>
     </div>
   </header>
 
-  <%# Projects %>
+  <%# Projects grid %>
   <section>
-    <h2 class="font-['PT_Serif'] text-xl font-bold mb-10 tracking-tight">Проекты</h2>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[#e5e5e5]">
       <% @projects.each do |project| %>
-        <article class="group">
-          <a href="<%= project.url %>" target="_blank" class="block">
-            <%# Screenshot %>
-            <div class="aspect-[3/2] overflow-hidden bg-[#f5f5f5] mb-4 border border-[#e5e5e5]">
-              <% if project.screenshot_url.present? %>
-                <img
-                  src="<%= project.screenshot_url %>"
-                  alt="<%= project.name %>"
-                  class="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-300"
-                  loading="lazy"
-                >
-              <% end %>
+        <article class="bg-white group">
+          <a href="<%= project.url %>" target="_blank" class="flex flex-col h-full p-8 hover:bg-[#fafafa] transition-colors">
+
+            <div class="text-7xl mb-6 leading-none select-none">
+              <%= project.emoji %>
             </div>
 
-            <%# Meta %>
-            <div class="flex items-center gap-2 mb-1">
-              <span class="text-xs text-[#666666] bg-[#f5f5f5] px-2 py-0.5 rounded"><%= project.tag %></span>
+            <div class="mb-1">
+              <span class="text-[10px] uppercase tracking-widest text-[#999999] font-medium"><%= project.tag %></span>
             </div>
 
-            <%# Title %>
-            <h3 class="font-['PT_Serif'] text-lg font-bold leading-snug group-hover:underline underline-offset-2 mb-1">
+            <h3 class="font-['PT_Serif'] text-xl font-bold mb-2 group-hover:underline underline-offset-2">
               <%= project.name %>
             </h3>
 
-            <%# Description %>
-            <p class="text-sm text-[#555555] leading-relaxed">
+            <p class="text-sm text-[#555555] leading-relaxed flex-1">
               <%= project.description %>
             </p>
 
-            <%# URL %>
-            <span class="mt-2 inline-block text-xs text-[#aaaaaa]">
-              <%= project.url.gsub(/^https?:\/\//, '').gsub(/\/$/, '') %>
+            <span class="mt-5 text-xs text-[#bbbbbb]">
+              <%= project.url.gsub(/^https?:\/\//, '').gsub(/\/$/, '') %> ↗
             </span>
+
           </a>
         </article>
       <% end %>
@@ -60,7 +48,7 @@
   </section>
 
   <%# Footer %>
-  <footer class="mt-24 pt-8 border-t border-[#e5e5e5] text-sm text-[#999999]">
+  <footer class="mt-16 text-sm text-[#bbbbbb]">
     shust.ai
   </footer>
 
