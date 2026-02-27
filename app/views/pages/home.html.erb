@@ -1,0 +1,57 @@
+<div class="max-w-3xl mx-auto px-6 py-16 sm:py-24">
+
+  <%# Header %>
+  <header class="mb-20 border-b border-[#e5e5e5] pb-12">
+    <h1 class="font-['PT_Serif'] text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+      Дмитрий Шуст
+    </h1>
+    <p class="text-[#666666] text-lg leading-relaxed max-w-xl">
+      Делаю Telegram-боты и веб-сервисы на стыке AI и продукта.
+    </p>
+    <div class="mt-6 flex gap-5 text-sm text-[#666666]">
+      <a href="https://t.me/dshust" target="_blank" class="hover:text-[#111111] transition-colors">Telegram</a>
+      <a href="https://github.com/dshust" target="_blank" class="hover:text-[#111111] transition-colors">GitHub</a>
+    </div>
+  </header>
+
+  <%# Projects %>
+  <section>
+    <h2 class="font-['PT_Serif'] text-xl font-bold mb-10 tracking-tight">Проекты</h2>
+
+    <div class="divide-y divide-[#e5e5e5]">
+      <% @projects.each do |project| %>
+        <article class="py-8 group">
+          <a href="<%= project.url %>" target="_blank" class="block">
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-3 mb-2">
+                  <h3 class="font-['PT_Serif'] text-xl font-bold group-hover:underline underline-offset-2">
+                    <%= project.name %>
+                  </h3>
+                  <span class="shrink-0 text-xs text-[#666666] bg-[#f5f5f5] px-2 py-0.5 rounded">
+                    <%= project.tag %>
+                  </span>
+                </div>
+                <p class="text-[#444444] leading-relaxed">
+                  <%= project.description %>
+                </p>
+                <span class="mt-3 inline-block text-xs text-[#999999]">
+                  <%= project.url.gsub(/^https?:\/\//, '').gsub(/\/$/, '') %>
+                </span>
+              </div>
+              <svg class="shrink-0 mt-1 w-4 h-4 text-[#cccccc] group-hover:text-[#666666] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+              </svg>
+            </div>
+          </a>
+        </article>
+      <% end %>
+    </div>
+  </section>
+
+  <%# Footer %>
+  <footer class="mt-20 pt-8 border-t border-[#e5e5e5] text-sm text-[#999999]">
+    shust.ai
+  </footer>
+
+</div>
