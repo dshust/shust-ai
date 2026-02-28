@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_27_194636) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_28_184944) do
+  create_table "enva_services", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "emoji"
+    t.text "generated_html"
+    t.string "name"
+    t.text "prompt"
+    t.boolean "published"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "projects", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "description"

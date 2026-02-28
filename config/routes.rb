@@ -3,7 +3,9 @@ Rails.application.routes.draw do
 
   scope "/enva", module: "enva", as: "enva" do
     root "dashboard#index", as: :root
-    resources :services, only: [ :show, :new ]
+    resources :services, only: [ :show, :new, :create ] do
+      member { post :publish }
+    end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

@@ -2,221 +2,102 @@
 
 <div class="flex h-[calc(100vh-56px)]">
 
-  <%# Левая панель — чат %>
-  <div class="w-[400px] shrink-0 bg-white border-r border-[#e5e5e5] flex flex-col">
+  <%# Левая панель — описание %>
+  <div class="w-[420px] shrink-0 bg-white border-r border-[#e5e5e5] flex flex-col">
 
-    <%# Заголовок чата %>
-    <div class="px-5 py-4 border-b border-[#e5e5e5]">
+    <div class="px-6 py-5 border-b border-[#e5e5e5]">
       <h2 class="text-[15px] font-semibold text-[#1a1a1a]">Опишите сервис</h2>
       <p class="text-xs text-[#a0a0a0] mt-0.5">ИИ создаст приложение по вашему описанию</p>
     </div>
 
-    <%# Сообщения %>
-    <div class="flex-1 overflow-y-auto px-5 py-5 flex flex-col gap-4" id="chat-messages">
+    <%= form_with url: enva_services_path, method: :post, id: "generate-form", data: { turbo: false } do |f| %>
+      <div class="flex-1 px-6 py-5 flex flex-col gap-5">
 
-      <%# Приветственное сообщение от ИИ %>
-      <div class="flex gap-3">
-        <div class="w-7 h-7 rounded-lg bg-[#0062FF] flex items-center justify-center shrink-0 mt-0.5">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8h10M8 3v10" stroke="white" stroke-width="2" stroke-linecap="round"/>
-          </svg>
+        <%# Название %>
+        <div>
+          <label class="block text-sm font-medium text-[#404040] mb-1.5">Название сервиса</label>
+          <%= f.text_field :name, placeholder: "Авансовый отчёт", class: "w-full border border-[#e5e5e5] rounded-lg px-3 py-2 text-sm text-[#1a1a1a] placeholder-[#c0c0c0] focus:outline-none focus:border-[#0000CC]" %>
         </div>
-        <div class="bg-[#f5f5f5] rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-[#1a1a1a] leading-relaxed max-w-[280px]">
-          Привет! Опишите, какой сервис вам нужен. Например: «форма для подачи авансового отчёта с загрузкой чеков» или «калькулятор командировочных расходов».
-        </div>
-      </div>
 
-      <%# Сообщение пользователя — пример %>
-      <div class="flex justify-end">
-        <div class="bg-[#0062FF] text-white rounded-2xl rounded-tr-sm px-4 py-3 text-sm leading-relaxed max-w-[280px]">
-          Хочу форму для авансового отчёта. Нужны поля: ФИО, подразделение, цель поездки, дата. Плюс таблица расходов с загрузкой чеков и итоговая сумма.
-        </div>
-      </div>
-
-      <%# Ответ ИИ — думает %>
-      <div class="flex gap-3" id="ai-thinking">
-        <div class="w-7 h-7 rounded-lg bg-[#0062FF] flex items-center justify-center shrink-0 mt-0.5">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8h10M8 3v10" stroke="white" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="bg-[#f5f5f5] rounded-2xl rounded-tl-sm px-4 py-3 max-w-[280px]">
-          <div class="text-sm text-[#737373] mb-2">Создаю сервис...</div>
-          <div class="flex items-center gap-3 text-xs text-[#a0a0a0]">
-            <span class="flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#0062FF] animate-bounce" style="animation-delay: 0ms"></span>
-              <span class="w-1.5 h-1.5 rounded-full bg-[#0062FF] animate-bounce" style="animation-delay: 150ms"></span>
-              <span class="w-1.5 h-1.5 rounded-full bg-[#0062FF] animate-bounce" style="animation-delay: 300ms"></span>
-            </span>
-            Генерирую форму
+        <%# Эмодзи %>
+        <div>
+          <label class="block text-sm font-medium text-[#404040] mb-1.5">Иконка (эмодзи)</label>
+          <div class="flex gap-2 flex-wrap">
+            <% %w[🧾 📋 💰 📊 📁 🔍 📝 ⚙️ 🏢 📈].each do |e| %>
+              <label class="cursor-pointer">
+                <input type="radio" name="emoji" value="<%= e %>" class="hidden peer" <%= e == "🧾" ? "checked" : "" %>>
+                <span class="text-xl w-9 h-9 flex items-center justify-center rounded-lg border border-[#e5e5e5] peer-checked:border-[#0000CC] peer-checked:bg-[#f0f0ff] transition-colors select-none"><%= e %></span>
+              </label>
+            <% end %>
           </div>
         </div>
+
+        <%# Описание — главное поле %>
+        <div class="flex-1">
+          <label class="block text-sm font-medium text-[#404040] mb-1.5">Что должен делать сервис</label>
+          <%= f.text_area :prompt, rows: 8,
+            placeholder: "Например: форма для авансового отчёта. Поля: ФИО, подразделение, цель поездки, дата. Таблица расходов с загрузкой чеков. Итоговая сумма считается автоматически.",
+            class: "w-full border border-[#e5e5e5] rounded-xl px-3 py-2.5 text-sm text-[#1a1a1a] placeholder-[#c0c0c0] focus:outline-none focus:border-[#0000CC] leading-relaxed resize-none" %>
+        </div>
+
+        <%# Подсказки %>
+        <div>
+          <p class="text-xs text-[#a0a0a0] font-medium mb-2">Попробуйте:</p>
+          <div class="flex flex-wrap gap-2">
+            <% [
+              "Авансовый отчёт с загрузкой чеков",
+              "Калькулятор командировочных",
+              "Реестр договоров с фильтрами",
+              "Табель учёта рабочего времени",
+              "Форма заявки на отпуск"
+            ].each do |hint| %>
+              <button type="button" onclick="document.querySelector('textarea[name=prompt]').value = '<%= hint %>'"
+                class="text-xs bg-[#f0f0ff] text-[#0000CC] px-3 py-1.5 rounded-lg hover:bg-[#e0e0ff] transition-colors font-medium">
+                <%= hint %>
+              </button>
+            <% end %>
+          </div>
+        </div>
+
       </div>
 
-    </div>
-
-    <%# Подсказки %>
-    <div class="px-5 pb-3 flex flex-col gap-2">
-      <p class="text-xs text-[#a0a0a0] font-medium">Попробуйте:</p>
-      <div class="flex flex-wrap gap-2">
-        <% [
-          "Форма авансового отчёта",
-          "Калькулятор ФОТ",
-          "Проверка договора",
-          "Табель учёта рабочего времени"
-        ].each do |hint| %>
-          <button class="text-xs bg-[#f0f4ff] text-[#0062FF] px-3 py-1.5 rounded-lg hover:bg-[#e0eaff] transition-colors font-medium">
-            <%= hint %>
-          </button>
-        <% end %>
-      </div>
-    </div>
-
-    <%# Поле ввода %>
-    <div class="p-4 border-t border-[#e5e5e5]">
-      <div class="flex gap-2 items-end">
-        <textarea
-          id="chat-input"
-          placeholder="Опишите нужный сервис..."
-          rows="3"
-          class="flex-1 resize-none text-sm border border-[#e5e5e5] rounded-xl px-3 py-2.5 text-[#1a1a1a] placeholder-[#c0c0c0] focus:outline-none focus:border-[#0062FF] leading-relaxed"
-        ></textarea>
-        <button class="btn-primary h-10 px-4 shrink-0 self-end">
+      <%# Кнопка генерации %>
+      <div class="p-5 border-t border-[#e5e5e5]">
+        <button type="submit" id="submit-btn"
+          class="w-full flex items-center justify-center gap-2 text-sm font-semibold text-white rounded-xl py-3 transition-colors"
+          style="background:#0000CC;"
+          onmouseover="this.style.background='#0000aa'"
+          onmouseout="this.style.background='#0000CC'">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
           </svg>
+          Сгенерировать сервис
         </button>
       </div>
-    </div>
 
+    <% end %>
   </div>
 
-  <%# Правая панель — превью генерируемого приложения %>
-  <div class="flex-1 flex flex-col bg-[#f5f5f5]">
-
-    <%# Тулбар превью %>
-    <div class="bg-white border-b border-[#e5e5e5] px-5 h-12 flex items-center justify-between">
-      <div class="flex items-center gap-2 text-sm text-[#737373]">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-        Предпросмотр
-      </div>
-      <div class="flex items-center gap-2">
-        <span class="tag tag-blue">Генерируется...</span>
-        <button class="btn-secondary opacity-50 cursor-not-allowed" disabled>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="16 12 12 8 8 12"/><line x1="12" y1="16" x2="12" y2="8"/></svg>
-          Опубликовать
-        </button>
-      </div>
-    </div>
-
-    <%# Превью формы (будущее приложение) %>
-    <div class="flex-1 overflow-y-auto p-8">
-      <div class="max-w-2xl mx-auto card p-8">
-
-        <%# Заголовок генерируемой формы %>
-        <div class="mb-6">
-          <div class="flex items-center gap-3 mb-1">
-            <div class="w-9 h-9 rounded-lg bg-[#f0f4ff] flex items-center justify-center text-xl">🧾</div>
-            <h2 class="text-lg font-semibold text-[#1a1a1a]">Авансовый отчёт</h2>
-          </div>
-          <p class="text-sm text-[#737373]">Заполните форму и прикрепите подтверждающие документы</p>
-        </div>
-
-        <%# Форма %>
-        <div class="flex flex-col gap-5">
-
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-[#404040] mb-1.5">ФИО сотрудника</label>
-              <input type="text" placeholder="Иванов Иван Иванович" class="w-full border border-[#e5e5e5] rounded-lg px-3 py-2 text-sm text-[#1a1a1a] placeholder-[#c0c0c0] focus:outline-none focus:border-[#0062FF]">
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-[#404040] mb-1.5">Подразделение</label>
-              <input type="text" placeholder="Бухгалтерия" class="w-full border border-[#e5e5e5] rounded-lg px-3 py-2 text-sm text-[#1a1a1a] placeholder-[#c0c0c0] focus:outline-none focus:border-[#0062FF]">
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-[#404040] mb-1.5">Цель поездки</label>
-              <input type="text" placeholder="Командировка в Москву" class="w-full border border-[#e5e5e5] rounded-lg px-3 py-2 text-sm text-[#1a1a1a] placeholder-[#c0c0c0] focus:outline-none focus:border-[#0062FF]">
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-[#404040] mb-1.5">Дата</label>
-              <input type="date" class="w-full border border-[#e5e5e5] rounded-lg px-3 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:border-[#0062FF]">
-            </div>
-          </div>
-
-          <%# Таблица расходов %>
-          <div>
-            <label class="block text-sm font-medium text-[#404040] mb-2">Расходы</label>
-            <div class="border border-[#e5e5e5] rounded-lg overflow-hidden">
-              <table class="w-full text-sm">
-                <thead class="bg-[#f5f5f5] text-[#737373]">
-                  <tr>
-                    <th class="text-left px-3 py-2 font-medium">Наименование</th>
-                    <th class="text-left px-3 py-2 font-medium w-28">Сумма, ₽</th>
-                    <th class="text-left px-3 py-2 font-medium w-32">Чек</th>
-                    <th class="w-8"></th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-[#f0f0f0]">
-                  <% [
-                    { name: "Авиабилеты", sum: "12 500", file: "ticket.pdf" },
-                    { name: "Гостиница (2 ночи)", sum: "8 400", file: "hotel.pdf" },
-                    { name: "Такси", sum: "1 200", file: nil }
-                  ].each do |row| %>
-                    <tr>
-                      <td class="px-3 py-2"><input type="text" value="<%= row[:name] %>" class="w-full border-0 focus:outline-none text-[#1a1a1a] bg-transparent"></td>
-                      <td class="px-3 py-2"><input type="text" value="<%= row[:sum] %>" class="w-full border-0 focus:outline-none text-[#1a1a1a] bg-transparent"></td>
-                      <td class="px-3 py-2">
-                        <% if row[:file] %>
-                          <span class="flex items-center gap-1 text-[#0062FF] text-xs">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                            <%= row[:file] %>
-                          </span>
-                        <% else %>
-                          <button class="text-xs text-[#a0a0a0] hover:text-[#0062FF] flex items-center gap-1">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                            Прикрепить
-                          </button>
-                        <% end %>
-                      </td>
-                      <td class="px-3 py-2">
-                        <button class="text-[#e0e0e0] hover:text-[#ff4444] transition-colors">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                        </button>
-                      </td>
-                    </tr>
-                  <% end %>
-                </tbody>
-              </table>
-              <div class="px-3 py-2 border-t border-[#f0f0f0]">
-                <button class="text-xs text-[#0062FF] hover:underline flex items-center gap-1 font-medium">
-                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="#0062FF" stroke-width="1.8" stroke-linecap="round"/></svg>
-                  Добавить строку
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <%# Итого %>
-          <div class="flex justify-end">
-            <div class="bg-[#f0f4ff] rounded-xl px-5 py-3 flex items-center gap-4">
-              <span class="text-sm text-[#737373]">Итого к возмещению:</span>
-              <span class="text-lg font-semibold text-[#0062FF]">22 100 ₽</span>
-            </div>
-          </div>
-
-          <%# Кнопка отправки %>
-          <div class="flex justify-end pt-2">
-            <button class="btn-primary px-6">Отправить на согласование</button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
+  <%# Правая панель — заглушка до генерации %>
+  <div class="flex-1 flex flex-col items-center justify-center bg-[#f5f5f5] gap-4 text-[#c0c0c0]">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>
+    </svg>
+    <p class="text-sm">Здесь появится предпросмотр сервиса</p>
   </div>
 
 </div>
+
+<script>
+  document.getElementById('generate-form').addEventListener('submit', function() {
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = `
+      <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+      </svg>
+      Генерирую...
+    `;
+    btn.style.background = '#3333cc';
+  });
+</script>

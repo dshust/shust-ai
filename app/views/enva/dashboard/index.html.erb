@@ -5,7 +5,8 @@
       <h1 class="text-2xl font-semibold text-[#1a1a1a]">Мои сервисы</h1>
       <p class="text-sm text-[#737373] mt-1">Приложения, созданные вами</p>
     </div>
-    <a href="<%= new_enva_service_path %>" style="display:inline-flex;align-items:center;gap:6px;background:#0062FF;color:white;font-size:14px;font-weight:500;padding:0 16px;height:36px;border-radius:8px;text-decoration:none;">
+    <a href="<%= new_enva_service_path %>"
+      style="display:inline-flex;align-items:center;gap:6px;background:#0000CC;color:white;font-size:14px;font-weight:500;padding:0 16px;height:36px;border-radius:8px;text-decoration:none;">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
         <path d="M7 1v12M1 7h12" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
       </svg>
@@ -15,38 +16,34 @@
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
-    <% services = [
-      { id: 1, name: "Авансовый отчёт", desc: "Форма подачи авансового отчёта с загрузкой чеков и автоматическим расчётом итогов", emoji: "🧾", tag: "Опубликован", tag_class: "tag-green", updated: "сегодня", users: 12 },
-      { id: 2, name: "Проверка договора", desc: "Загрузи договор — сервис проверит на типовые риски и выдаст заключение", emoji: "📋", tag: "Опубликован", tag_class: "tag-green", updated: "вчера", users: 5 },
-      { id: 3, name: "Калькулятор ФОТ", desc: "Расчёт фонда оплаты труда по количеству сотрудников, ставкам и налоговым вычетам", emoji: "💰", tag: "Черновик", tag_class: "tag-gray", updated: "3 дня назад", users: 0 },
-    ] %>
-
-    <% services.each do |s| %>
-      <a href="<%= enva_service_path(s[:id]) %>" style="background:white;border-radius:12px;border:1px solid #e5e5e5;padding:20px;display:flex;flex-direction:column;gap:12px;text-decoration:none;transition:box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'" onmouseout="this.style.boxShadow='none'">
+    <% @services.each do |s| %>
+      <a href="<%= enva_service_path(s) %>"
+        style="background:white;border-radius:12px;border:1px solid #e5e5e5;padding:20px;display:flex;flex-direction:column;gap:12px;text-decoration:none;"
+        onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'"
+        onmouseout="this.style.boxShadow='none'">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;">
-          <div style="width:44px;height:44px;border-radius:12px;background:#f0f4ff;display:flex;align-items:center;justify-content:center;font-size:22px;"><%= s[:emoji] %></div>
-          <span style="display:inline-flex;align-items:center;font-size:12px;font-weight:500;padding:2px 8px;border-radius:6px;line-height:20px;<%= s[:tag_class] == 'tag-green' ? 'background:#f0faf4;color:#008744;' : 'background:#f5f5f5;color:#737373;' %>"><%= s[:tag] %></span>
+          <div style="width:44px;height:44px;border-radius:12px;background:#f0f0ff;display:flex;align-items:center;justify-content:center;font-size:22px;"><%= s.emoji || "⚡" %></div>
+          <span style="display:inline-flex;font-size:12px;font-weight:500;padding:2px 8px;border-radius:6px;<%= s.published? ? 'background:#f0faf4;color:#008744;' : 'background:#f5f5f5;color:#737373;' %>">
+            <%= s.published? ? "Опубликован" : "Черновик" %>
+          </span>
         </div>
         <div>
-          <div style="font-size:15px;font-weight:600;color:#1a1a1a;"><%= s[:name] %></div>
-          <div style="font-size:14px;color:#737373;margin-top:4px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;"><%= s[:desc] %></div>
+          <div style="font-size:15px;font-weight:600;color:#1a1a1a;"><%= s.name.presence || s.prompt.truncate(40) %></div>
+          <div style="font-size:13px;color:#737373;margin-top:4px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;"><%= s.prompt %></div>
         </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid #f0f0f0;font-size:12px;color:#a0a0a0;">
-          <span>Обновлён <%= s[:updated] %></span>
-          <% if s[:users] > 0 %>
-            <span style="display:flex;align-items:center;gap:4px;">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              <%= s[:users] %> пользователей
-            </span>
-          <% end %>
+        <div style="font-size:12px;color:#a0a0a0;padding-top:8px;border-top:1px solid #f0f0f0;">
+          <%= s.created_at.strftime("%d.%m.%Y") %>
         </div>
       </a>
     <% end %>
 
-    <a href="<%= new_enva_service_path %>" style="background:white;border-radius:12px;border:2px dashed #e5e5e5;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:180px;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='#0062FF';this.style.background='#fafcff'" onmouseout="this.style.borderColor='#e5e5e5';this.style.background='white'">
-      <div style="width:44px;height:44px;border-radius:12px;background:#f0f4ff;display:flex;align-items:center;justify-content:center;">
+    <a href="<%= new_enva_service_path %>"
+      style="background:white;border-radius:12px;border:2px dashed #e5e5e5;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:180px;text-decoration:none;"
+      onmouseover="this.style.borderColor='#0000CC';this.style.background='#fafaff'"
+      onmouseout="this.style.borderColor='#e5e5e5';this.style.background='white'">
+      <div style="width:44px;height:44px;border-radius:12px;background:#f0f0ff;display:flex;align-items:center;justify-content:center;">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M10 4v12M4 10h12" stroke="#0062FF" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M10 4v12M4 10h12" stroke="#0000CC" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
       </div>
       <span style="font-size:14px;font-weight:500;color:#737373;">Создать новый сервис</span>

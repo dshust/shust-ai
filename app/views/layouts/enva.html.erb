@@ -21,28 +21,36 @@
     <nav class="bg-white border-b border-[#e5e5e5] h-14 flex items-center px-6 shrink-0">
       <div class="flex items-center gap-8 w-full">
 
-        <a href="<%= enva_root_path %>" class="flex items-center gap-2">
-          <div class="w-7 h-7 bg-[#0062FF] rounded-lg flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8h10M8 3v10" stroke="white" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <span class="text-[15px] font-semibold text-[#1a1a1a] tracking-tight">Энва</span>
+        <a href="<%= enva_root_path %>" class="flex items-center">
+          <svg height="32" viewBox="0 0 220 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <%# Иконка — скруглённый квадрат с волной %>
+            <rect x="1" y="1" width="58" height="58" rx="14" fill="#0000CC"/>
+            <rect x="1" y="1" width="58" height="58" rx="14" fill="url(#icon-grad)" opacity="0.15"/>
+            <path d="M12 30 C16 18, 22 18, 26 30 C30 42, 36 42, 40 30 C44 18, 50 18, 52 24" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <defs>
+              <linearGradient id="icon-grad" x1="0" y1="0" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="white"/>
+                <stop offset="100%" stop-color="transparent"/>
+              </linearGradient>
+            </defs>
+            <%# Текст ЭНВА %>
+            <text x="74" y="43" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="34" fill="#0000CC" letter-spacing="-1">ЭНВА</text>
+          </svg>
         </a>
 
         <div class="flex items-center gap-1">
           <%= link_to "Мои сервисы", enva_root_path,
-            class: "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors #{current_page?(enva_root_path) ? 'bg-[#f0f4ff] text-[#0062FF]' : 'text-[#404040] hover:bg-[#f5f5f5]'}" %>
+            class: "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors #{current_page?(enva_root_path) ? 'bg-[#f0f4ff] text-[#0000CC]' : 'text-[#404040] hover:bg-[#f5f5f5]'}" %>
         </div>
 
         <div class="ml-auto flex items-center gap-3">
-          <a href="<%= new_enva_service_path %>" style="display:inline-flex;align-items:center;gap:6px;background:#0062FF;color:white;font-size:14px;font-weight:500;padding:0 16px;height:36px;border-radius:8px;border:none;cursor:pointer;text-decoration:none;">
+          <a href="<%= new_enva_service_path %>" style="display:inline-flex;align-items:center;gap:6px;background:#0000CC;color:white;font-size:14px;font-weight:500;padding:0 16px;height:36px;border-radius:8px;border:none;cursor:pointer;text-decoration:none;">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path d="M7 1v12M1 7h12" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
             </svg>
             Новый сервис
           </a>
-          <div class="w-8 h-8 rounded-full bg-[#0062FF] flex items-center justify-center text-white text-xs font-semibold select-none">
+          <div class="w-8 h-8 rounded-full bg-[#0000CC] flex items-center justify-center text-white text-xs font-semibold select-none">
             АН
           </div>
         </div>
