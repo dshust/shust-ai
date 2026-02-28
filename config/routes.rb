@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
   root "pages#home"
+
+  scope "/enva", module: "enva", as: "enva" do
+    root "dashboard#index", as: :root
+    resources :services, only: [ :show, :new ]
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
