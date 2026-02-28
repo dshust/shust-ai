@@ -1,6 +1,6 @@
 module Enva
   class GeminiService
-    API_URL = "https://api.kie.ai/v1/chat/completions"
+    API_URL = "https://api.kie.ai/gemini-2.5-flash/v1/chat/completions"
 
     SYSTEM_PROMPT = <<~PROMPT
       Ты — эксперт по созданию бизнес-приложений. По описанию пользователя создай полноценное одностраничное HTML-приложение.
